@@ -1,18 +1,21 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 import readlineSync from 'readline-sync';
+import { getAuthUrl, formatToken } from "./getAuth.js";
 
-const userId = 'lglof';
+const userId = process.env.USER_ID;
 // durations in millis on spotify end
 const breakLength = 5 * 60 * 1000;
 const focusLength = 25 * 60 * 1000;
 const totalSessions = 4;
 
-console.log("Searching Spotify for Lars' playlists...");
+const authUrl = getAuthUrl();
 
-const spotify = SpotifyApi.withClientCredentials(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
-);
+console.log(`Auth url will be: ${authUrl}`);
+const rawToken = readlineSync.question('paste in the query params for the resulting url: ');
+
+const formattedToken = formatToken(rawToken);
+
+const spotify = SpotifyApi.withAccessToken(process.env.CLIENT_ID, formattedToken)
 
 const {items: playlists} = await spotify.playlists.getUsersPlaylists(userId);
 
@@ -37,17 +40,11 @@ for (let session = 0; session < totalSessions; session++) {
     uris.push(...breakSet);
 }
 
-console.log(uris)
-
-
 // make playlist here
 const playlistTitle = readlineSync.question('Please name your playlist');
 const playlist = await spotify.playlists.createPlaylist(userId, { name: playlistTitle });
-console.log(playlist)
 
-// ideally we want a big list now [ 'spotify:track:<uri>', 'spotify:track:<uri>']
-// then we can add items to a playlist in bulk
-await spotify.playlists.addItemsToPlaylist(playlist.id, uris.toString());
+await spotify.playlists.addItemsToPlaylist(playlist.id, uris);
 
 process.exit(0);
 

@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --env-file=.env src/index.mjs"
+    "start": "node --env-file=.env src/index.mjs",
+    "auth": "node --env-file=.env get_auth.js"
   },
   "author": "",
   "license": "ISC",
