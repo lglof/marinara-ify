@@ -35,9 +35,17 @@ for (let session = 0; session < totalSessions; session++) {
     let focusSet = createPlaylistChunk(focusListItems, focusLength);
     uris.push(...focusSet);
 
+    // add a 'take a break' stinger
+    // I want 'stinger:rest' from sea of stars
+    uris.push('spotify:track:3Zx1zDPsLhEYrDimRZGQ8x')
+
     // making break set
     let breakSet = createPlaylistChunk(breakListItems, breakLength);
     uris.push(...breakSet);
+
+    // add a 'back to work' stinger
+    // this one is 'stinger hortence solo' from sea of stars
+    uris.push('spotify:track:1DkLwXV1Z09sp7twLo4xeu')
 }
 
 // make playlist here
